@@ -49,12 +49,12 @@ final class Container implements IContainer
      * @return IResources
      * @throws Exception
      */
-    public static function newResources($credentials)
+    public static function newResources($credentials, $proxy_options = array())
     {
         if ((!isset($credentials[self::USERNAME])) || (!isset($credentials[self::PASSWORD]))) {
             throw new Exception('Invalid credentials');
         }
-        $restClient = new Client($credentials[self::USERNAME], $credentials[self::PASSWORD]);
+        $restClient = new Client($credentials[self::USERNAME], $credentials[self::PASSWORD], $proxy_options);
         return new Resources($restClient);
     }
 

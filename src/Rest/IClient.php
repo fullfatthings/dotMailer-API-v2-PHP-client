@@ -15,7 +15,7 @@ interface IClient
      * @param string $username API username (email)
      * @param string $password API password
      */
-    public function __construct($username, $password);
+    public function __construct($username, $password, $proxy_options = array());
 
     /**
      * Execute a REST request

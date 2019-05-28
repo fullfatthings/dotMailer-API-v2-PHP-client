@@ -26,8 +26,23 @@ class Client implements IClient
     /** @var \RestClient\Client */
     private $restClient;
 
-    public function __construct($username, $password)
+    public function __construct($username, $password, $proxy_options = array())
     {
+
+        $curl_options = array(
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_TIMEOUT => 15,
+        );
+
+        if (isset($proxy_options['proxy'])) {
+            $curl_options[CURLOPT_PROXY] = $proxy_options['proxy'];
+            if (isset($proxy_options['port'])) {
+                $curl_options[CURLOPT_PROXYPORT] = $proxy_options['port'];
+            }
+            if (isset($proxy_options['type'])) {
+                $curl_options[CURLOPT_PROXYTYPE] = $proxy_options['type'];
+            }
+        }
 
         $this->restClient = new \RestClient\Client(array(
             Request::BASE_URL_KEY => 'https://api.dotmailer.com/v2',
@@ -37,9 +52,7 @@ class Client implements IClient
             Request::HEADERS_KEY => array(
                 'Content-Type' => 'application/json'
             ),
-            Request::CURL_OPTIONS_KEY => array(
-                CURLOPT_SSL_VERIFYPEER => false
-            ),
+            Request::CURL_OPTIONS_KEY => $curl_options,
         ));
 
     }
